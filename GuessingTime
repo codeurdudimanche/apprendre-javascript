@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+	<title>Guessing time game</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+<style type="text/css">
+table{
+	width: 75%;
+	text-align:center;
+	margin: 0px auto;   
+}
+
+td {
+	width: 200px;
+}
+
+.large
+{
+	width: 600px;
+}
+
+.rules{
+	text-align:center;
+}
+</style>
+	
+<script>
+var time= 0;
+var time2= 0;
+var besttime= 100000;
+var switchreset = false;
+var stop1, stop2, stop3;
+
+function timer0()
+	{
+	timer1();
+	time2=0;
+	stop1 = setInterval(timer1,10);
+	stop2 = setInterval(output,100);
+	stop3 = setInterval(output2,100);
+
+	}
+
+function timer1()
+	{
+	if(time2==0)
+		{
+		time++;
+		// document.getElementById('afftime1').innerHTML = time;
+		// La ligne precedente affiche le chrono. Activer en cas de test
+		}
+	}
+	
+function timer2()
+	{
+	time2= time;
+	//document.getElementById('afftime2').innerHTML = time2;
+	//La ligne precedente affiche le score. Activer en cas de test
+	}
+	
+function output()
+	{
+	if(time2>10)
+		{
+		var fintime1 = time2/100;
+		var fintime2 = Math.abs(500-time2);
+
+		var mes= "You clicked after " + fintime1 + "seconds. You are " + fintime2/100 + " seconds off";
+		document.getElementById('message').innerHTML = mes;
+		
+			if(fintime2< besttime)
+			besttime=fintime2;
+		
+		}
+	}
+	
+function output2()
+	{
+	if (time2>10)
+	{
+	var mes2= "Your best score is " + besttime/100 + "seconds . Press Reset then Start to try and beat it";
+	document.getElementById('message2').innerHTML = mes2;
+	}
+	}
+	
+function reset()
+	{
+	time= 0;
+	mes=null;
+	mes2="Your best score is " + besttime/100 + "seconds . Press Start to try and beat it";;
+	document.getElementById('message').innerHTML = mes;
+	document.getElementById('message2').innerHTML = mes2;
+	clearInterval(stop1);
+	clearInterval(stop2);
+	clearInterval(stop3);
+	}
+
+</script>
+ </head>
+ 
+<body>
+
+<h1 class="rules">Guessing game</h1>
+<p class="rules">How long are 5 seconds? Press start, wait 5 seconds, press stop.</p>
+		<table>
+		<tr>
+			<td><input type="button" value="Start" onclick="timer0()" /></td>
+			<td></td>
+			<td><input type="button" value="Stop" onclick="timer2()" /></td>
+		</tr>
+
+		<!-- Ce code affiche les chronos. Activer en cas de debug
+		<tr>
+			<td id="afftime1"/>
+			<td id="afftime2"/>
+		</tr>
+		-->
+
+		<tr><td/><td class="large" id="message"/><td/></tr>
+		<tr><td/><td class="large" id="message2"/><td/></tr>
+
+		<tr>
+			<td />
+			<td><input type="button" value="Reset" onclick="reset()"></td>
+			<td />
+		</tr>
+		</table>
+</body>
+</html>
