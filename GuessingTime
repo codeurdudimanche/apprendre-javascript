@@ -17,88 +17,64 @@ td {
 
 .large
 {
-	width: 600px;
+	width: 800px;
+	text-align:center;
 }
 
 .rules{
 	text-align:center;
 }
 </style>
-	
 <script>
-var time= 0;
-var time2= 0;
-var besttime= 100000;
-var switchreset = false;
-var stop1, stop2, stop3;
+var time, time1, time2, mes, mes2, besttime;
+mes= mes2= null;
+time= time1= time2= 0;
+besttime= 10000000;
 
+// timer0 reinitialise les 2 valeurs de temps, efface le 1er message et affiche le 2e (sans le bravo meilleur score)
 function timer0()
 	{
-	timer1();
-	time2=0;
-	stop1 = setInterval(timer1,10);
-	stop2 = setInterval(output,100);
-	stop3 = setInterval(output2,100);
-
+	time1, time2 = 0;
+	time1 = new Date();
+	document.getElementById('message').innerHTML = null;
+	document.getElementById('message2').innerHTML = mes2;
 	}
 
+//timer1 est declenche Quand on appuie sur stop
 function timer1()
 	{
-	if(time2==0)
-		{
-		time++;
-		// document.getElementById('afftime1').innerHTML = time;
-		// La ligne precedente affiche le chrono. Activer en cas de test
-		}
+	time2 = new Date();
+	output()
 	}
-	
-function timer2()
-	{
-	time2= time;
-	//document.getElementById('afftime2').innerHTML = time2;
-	//La ligne precedente affiche le score. Activer en cas de test
-	}
-	
+
+//Est appele dans timer	1. Definit le temps, la difference et affiche les differents messages du jeu
 function output()
 	{
-	if(time2>10)
-		{
-		var fintime1 = time2/100;
-		var fintime2 = Math.abs(500-time2);
-
-		var mes= "You clicked after " + fintime1 + "seconds. You are " + fintime2/100 + " seconds off";
+		var fintime1 = time2.getTime() - time1.getTime();
+		var fintime2 = Math.abs(5000-fintime1);
+		var fintime2 = Math.trunc(fintime2);
+		
+		mes= "You clicked after " + fintime1/1000 + "seconds. You are " + fintime2 + " milliseconds off";
 		document.getElementById('message').innerHTML = mes;
 		
-			if(fintime2< besttime)
+		if(fintime2< besttime)
+			{
 			besttime=fintime2;
-		
+			var mes3= "<b>Congratulations! Your new Best Score is " + besttime + " milliseconds</b>";
+			mes2= "Your best score is " + besttime + " milliseconds . Can you beat it?";
+			document.getElementById('message2').innerHTML = mes3;
+			}
+
+
+		else if(fintime2> besttime)
+		{
+		mes2= "Your best score is " + besttime + " milliseconds . Can you beat it?";
+		document.getElementById('message2').innerHTML = mes2;
 		}
-	}
-	
-function output2()
-	{
-	if (time2>10)
-	{
-	var mes2= "Your best score is " + besttime/100 + "seconds . Press Reset then Start to try and beat it";
-	document.getElementById('message2').innerHTML = mes2;
-	}
-	}
-	
-function reset()
-	{
-	time= 0;
-	mes=null;
-	mes2="Your best score is " + besttime/100 + "seconds . Press Start to try and beat it";;
-	document.getElementById('message').innerHTML = mes;
-	document.getElementById('message2').innerHTML = mes2;
-	clearInterval(stop1);
-	clearInterval(stop2);
-	clearInterval(stop3);
 	}
 
 </script>
- </head>
- 
+</head>
 <body>
 
 <h1 class="rules">Guessing game</h1>
@@ -107,24 +83,10 @@ function reset()
 		<tr>
 			<td><input type="button" value="Start" onclick="timer0()" /></td>
 			<td></td>
-			<td><input type="button" value="Stop" onclick="timer2()" /></td>
+			<td><input type="button" value="Stop" onclick="timer1()" /></td>
 		</tr>
-
-		<!-- Ce code affiche les chronos. Activer en cas de debug
-		<tr>
-			<td id="afftime1"/>
-			<td id="afftime2"/>
-		</tr>
-		-->
-
 		<tr><td/><td class="large" id="message"/><td/></tr>
 		<tr><td/><td class="large" id="message2"/><td/></tr>
-
-		<tr>
-			<td />
-			<td><input type="button" value="Reset" onclick="reset()"></td>
-			<td />
-		</tr>
 		</table>
 </body>
 </html>
